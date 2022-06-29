@@ -14,6 +14,7 @@ const closeModal = document.getElementById("close_modal");
 const form = document.getElementById("form");
 const formData = [...document.querySelectorAll("div.formData > input")];
 const buttonSubmit = document.getElementById("btnSubmitForm");
+const spanError = [...document.querySelectorAll(".msgError")];
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -30,13 +31,25 @@ function lauchClosingModal() {
   modalbg.style.display = "none";
 }
 
+function getMsgError(inputName, active) {
+
+  spanError.map((value) => {
+    if (value.id === `msgError-${inputName}`) {
+      active ? value.style.display = "flex" : value.style.display = "none"
+    }
+  })
+
+}
+
 // Click on submit button
 function submitForm(e) {
   e.preventDefault();
   const getValue = name => e.target[name].value;
   const getChecked = name => e.target[name].checked;
   
-  tabValidation = [];
+  let tabValidation = [];
+  let data = [];
+  let regexEmail = new RegExp(/^[\w\.]+@([\w-]+\.)+[\w-]{2,4}$/gm);
 
   formData.map((input) => {
 
@@ -44,19 +57,51 @@ function submitForm(e) {
       const value = getValue(input.name);
 
       if (value.length >= 1) {
-        console.log('succes', input.name, value);
-        tabValidation.push(true);
+
+        if (input.name === "email") {
+          let mail = value.match(regexEmail)
+          
+          if (mail) {
+            tabValidation.push(true);
+  
+            data.push({
+              input: input.name,
+              value
+            })
+
+            getMsgError(input.name, false)
+          } else {
+            tabValidation.push(false);
+
+            getMsgError(input.name, true)
+          }
+        } else {
+          tabValidation.push(true);
+
+          data.push({
+            input: input.name,
+            value
+          })
+
+          getMsgError(input.name, false)
+        }
+
       } else {
-        console.log('error', input.name, value);
+
         tabValidation.push(false);
+
+        getMsgError(input.name, true)
       }
 
     } else if (input.name === 'location') {
       const check = getChecked(input.id);
       
       if (check) {
-        console.log(input.value);
         tabValidation.push(true);
+        data.push({
+          input: input.name,
+          value: input.value
+        })
       }
 
     } else if (input.id === 'checkbox1') {
@@ -64,8 +109,10 @@ function submitForm(e) {
       
       if (check) {
         tabValidation.push(true);
+        getMsgError(input.id, false)
       } else {
         tabValidation.push(false);
+        getMsgError(input.id, true)
       }
     }
   })
@@ -74,6 +121,12 @@ function submitForm(e) {
     buttonSubmit.style.background = 'red';
   } else {
     buttonSubmit.style.background = 'green';
+
+    console.log(data);
+
+    setTimeout(() => {
+      lauchClosingModal();
+    }, 1500)
   }
  
 }

@@ -477,6 +477,15 @@ footer {
   padding-right: 2vw;
   margin: 0 20px;
 }
+
+.msgError{
+  display: none;
+  font-size: 12px;
+  color: red;
+  text-decoration: underline;
+  margin: 0;
+  padding: 0;
+}
 @media screen and (max-width: 800px) {
   .hero-section {
     display: block;

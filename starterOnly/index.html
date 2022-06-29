@@ -72,8 +72,8 @@
                   name="first"
                   minlength="2"
                   placeholder="Veuillez renseigner votre prénom"
-                  required
-                /><br>
+                />
+                <span class="msgError" id="msgError-first">Erreur de saisie prénom</span>
               </div>
               <div
                 class="formData">
@@ -84,8 +84,8 @@
                   id="last"
                   name="last"
                   placeholder="Veuillez renseigner votre nom"
-                  required
-                /><br>
+                />
+                <span class="msgError" id="msgError-last">Erreur de saisie nom</span>
               </div>
               <div
                 class="formData">
@@ -96,7 +96,8 @@
                   id="email"
                   name="email"
                   placeholder="Veuillez renseigner votre email"
-                /><br>
+                />
+                <span class="msgError" id="msgError-email">Erreur de saisie Email</span>
               </div>
               <div
                 class="formData">
@@ -106,12 +107,14 @@
                   type="date"
                   id="birthdate"
                   name="birthdate"
-                /><br>
+                />
+                <span class="msgError" id="msgError-birthdate">Erreur de saisie anniversaire</span>
               </div>
               <div
                 class="formData">
                 <label for="quantity">À combien de tournois GameOn avez-vous déjà participé ?</label><br>
                 <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99" value="0">
+                <span class="msgError" id="msgError-quantity">Erreur de saisie quantité</span>
               </div>
               <label class="text-label" for="location">A quel tournoi souhaitez-vous participer cette année ?</label>
               <div
@@ -196,7 +199,7 @@
                   <span class="checkbox-icon"></span>
                   J'ai lu et accepté les conditions d'utilisation.
                 </label>
-                <br>
+                <span class="msgError" id="msgError-checkbox1">Veuillez accepter nos conditions</span>
                 <input class="checkbox-input" type="checkbox" id="checkbox2"/>
                 <label class="checkbox2-label" for="checkbox2">
                   <span class="checkbox-icon"></span>
