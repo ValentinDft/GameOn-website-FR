@@ -15,6 +15,7 @@ const form = document.getElementById("form");
 const formData = [...document.querySelectorAll("div.formData > input")];
 const buttonSubmit = document.getElementById("btnSubmitForm");
 const spanError = [...document.querySelectorAll(".msgError")];
+const spanSuccess = document.getElementById("msgSuccess")
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -31,6 +32,7 @@ function lauchClosingModal() {
   modalbg.style.display = "none";
 }
 
+// get message span error
 function getMsgError(inputName, active) {
 
   spanError.map((value) => {
@@ -48,7 +50,6 @@ function submitForm(e) {
   const getChecked = name => e.target[name].checked;
   
   let tabValidation = [];
-  let data = [];
   let regexEmail = new RegExp(/^[\w\.]+@([\w-]+\.)+[\w-]{2,4}$/gm);
 
   formData.map((input) => {
@@ -62,28 +63,32 @@ function submitForm(e) {
           let mail = value.match(regexEmail)
           
           if (mail) {
+
             tabValidation.push(true);
-  
-            data.push({
-              input: input.name,
-              value
-            })
-
             getMsgError(input.name, false)
+
           } else {
+
             tabValidation.push(false);
-
             getMsgError(input.name, true)
+
           }
+        } else if (input.name === "birthdate") {
+          const date = new Date(value);
+
+          if (date.getFullYear() >= 2007) {
+            tabValidation.push(false);
+            getMsgError(input.name, true)
+          } else {
+            tabValidation.push(true);
+            getMsgError(input.name, false)
+          }
+           
         } else {
+
           tabValidation.push(true);
-
-          data.push({
-            input: input.name,
-            value
-          })
-
           getMsgError(input.name, false)
+
         }
 
       } else {
@@ -98,10 +103,6 @@ function submitForm(e) {
       
       if (check) {
         tabValidation.push(true);
-        data.push({
-          input: input.name,
-          value: input.value
-        })
       }
 
     } else if (input.id === 'checkbox1') {
@@ -117,17 +118,32 @@ function submitForm(e) {
     }
   })
 
-  if (tabValidation.includes(false)) {
+  validationForm(tabValidation)
+}
+
+// Validation of the complete form
+let validationForm = (tab) => {
+  if (tab.includes(false)) {
     buttonSubmit.style.background = 'red';
   } else {
     buttonSubmit.style.background = 'green';
-
-    console.log(data);
+    spanSuccess.style.display = 'flex';
 
     setTimeout(() => {
       lauchClosingModal();
-    }, 1500)
+      resetForm();
+    }, 2000)
   }
- 
+}
+
+// Reset form when success
+let resetForm = () => {
+  formData.map((input) => {
+    input.name !== 'quantity' ? input.value = '' : input.value = 0;
+    input.id !== 'location1' ? input.checked = false : input.checked = true;
+    buttonSubmit.style.background = 'red';
+    spanSuccess.style.display = 'none';
+
+  })
 }
 
