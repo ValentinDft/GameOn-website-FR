@@ -15,7 +15,7 @@ const form = document.getElementById("form");
 const formData = [...document.querySelectorAll("div.formData > input")];
 const buttonSubmit = document.getElementById("btnSubmitForm");
 const spanError = [...document.querySelectorAll(".msgError")];
-const spanSuccess = document.getElementById("msgSuccess")
+const modalSuccess = document.querySelector(".modal-success")
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -46,33 +46,36 @@ function getMsgError(inputName, active) {
 // Click on submit button
 function submitForm(e) {
   e.preventDefault();
+
+  // get value of input text & check input
   const getValue = name => e.target[name].value;
   const getChecked = name => e.target[name].checked;
   
   let tabValidation = [];
   let regexEmail = new RegExp(/^[\w\.]+@([\w-]+\.)+[\w-]{2,4}$/gm);
 
+  // map on all input on div "formData"
   formData.map((input) => {
 
+    // check for input text
     if (input.className === 'text-control') {
       const value = getValue(input.name);
 
+      // check if at least one character specified
       if (value.length >= 1) {
 
+        // specific verif on email & birthdate
         if (input.name === "email") {
           let mail = value.match(regexEmail)
           
           if (mail) {
-
             tabValidation.push(true);
             getMsgError(input.name, false)
-
           } else {
-
             tabValidation.push(false);
             getMsgError(input.name, true)
-
           }
+
         } else if (input.name === "birthdate") {
           const date = new Date(value);
 
@@ -85,19 +88,16 @@ function submitForm(e) {
           }
            
         } else {
-
           tabValidation.push(true);
           getMsgError(input.name, false)
-
         }
 
       } else {
-
         tabValidation.push(false);
-
         getMsgError(input.name, true)
       }
 
+    // check if input check location
     } else if (input.name === 'location') {
       const check = getChecked(input.id);
       
@@ -105,6 +105,7 @@ function submitForm(e) {
         tabValidation.push(true);
       }
 
+    // check if input check conditions
     } else if (input.id === 'checkbox1') {
       const check = getChecked(input.id);
       
@@ -123,16 +124,17 @@ function submitForm(e) {
 
 // Validation of the complete form
 let validationForm = (tab) => {
+
+  // if tab include only true is success
   if (tab.includes(false)) {
     buttonSubmit.style.background = 'red';
   } else {
-    buttonSubmit.style.background = 'green';
-    spanSuccess.style.display = 'flex';
+    modalbg.style.display = 'none'
+    modalSuccess.style.display = 'flex';
 
     setTimeout(() => {
-      lauchClosingModal();
       resetForm();
-    }, 2000)
+    }, 3000)
   }
 }
 
@@ -142,8 +144,7 @@ let resetForm = () => {
     input.name !== 'quantity' ? input.value = '' : input.value = 0;
     input.id !== 'location1' ? input.checked = false : input.checked = true;
     buttonSubmit.style.background = 'red';
-    spanSuccess.style.display = 'none';
-
+    modalSuccess.style.display = 'none';
   })
 }
 
